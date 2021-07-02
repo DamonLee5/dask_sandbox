@@ -1,0 +1,4 @@
+numpy
+dask
+dask_jobqueue
+
