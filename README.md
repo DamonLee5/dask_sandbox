@@ -22,6 +22,6 @@ pip install -r requirements.txt
 ## Run demo
 1) Run demo
 ```
-python dask_demo.py
-python dask_demo_fn.py
+python demo_local_single.py # Run on your local computer
+python demo_slurm_single.py # Run on a slurm cluster.
 ```
