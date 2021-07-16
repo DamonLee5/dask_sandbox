@@ -131,7 +131,7 @@ dmypy.json
 # Personal
 dask-worker-space/*
 demo/*.out
-
+demo/dask-worker-space/
 
 # Pycharm
 .idea/*
