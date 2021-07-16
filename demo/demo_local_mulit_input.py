@@ -5,9 +5,9 @@ import os
 from pprint import pprint
 from dask.distributed import Client, as_completed, LocalCluster
 
-def slow_increment(x):
+def sum_square(x,y,z):
     time.sleep(5)
-    return {'result': x + 1,
+    return {'result': [x,y,z,x**2 + y**2+z**2],
             'host': socket.gethostname(),
             'pid': os.getpid(),
             'time': time.strftime("%H:%M:%S")}
@@ -18,6 +18,6 @@ if __name__ == '__main__':
 
     print('client:', client)
 
-    for future in as_completed(client.map(slow_increment, range(4))): 
+    for future in as_completed(client.map(sum_square, range(0,100), tuple(i for i in range(100,200)), tuple(i for i in range(200,300)))): # FIX
         result = future.result()
         pprint(result)

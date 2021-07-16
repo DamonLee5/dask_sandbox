@@ -3,16 +3,12 @@ import logging
 import socket
 import os
 from pprint import pprint
-# import dask.config
-# import dask.distributed
 from dask.distributed import Client, as_completed
-
 from dask_jobqueue import SLURMCluster
 
-# dask.config.set({"distributed.admin.tick.limit":'3h'})
-def slow_increment(x):
+def sum_square(x,y,z):
     time.sleep(5)
-    return {'result': x + 1,
+    return {'result':[x,y,z,x**2 + y**2+z**2],
             'host': socket.gethostname(),
             'pid': os.getpid(),
             'time': time.strftime("%H:%M:%S")}
@@ -34,10 +30,9 @@ if __name__ == '__main__':
             break
         time.sleep(1)
 
-    # futures = client.map(slow_increment, range(0,1000,5))
 
     print('client:', client)
 
-    for future in as_completed(client.map(slow_increment, range(0,1000,5))): # FIX
+    for future in as_completed(client.map(sum_square, range(0,100), tuple(i for i in range(100,200)), tuple(i for i in range(200,300)))): # FIX
         result = future.result()
         pprint(result)
