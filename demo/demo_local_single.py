@@ -18,6 +18,6 @@ if __name__ == '__main__':
 
     print('client:', client)
 
-    for future in as_completed(client.map(slow_increment, range(4))): 
+    for future in as_completed(client.map(slow_increment, range(4))): # Submit 4 jobs. slow_increment(0), slow_increment(1), slow_increment(2), slow_increment(3)
         result = future.result()
         pprint(result)
