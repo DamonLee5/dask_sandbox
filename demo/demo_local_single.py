@@ -13,11 +13,14 @@ def slow_increment(x):
             'time': time.strftime("%H:%M:%S")}
 
 if __name__ == '__main__':
-    cluster = LocalCluster(processes=2 ,n_workers=2)
+    # Set processes=True - Multiple independence processes with different process IDs will be used.
+    # Set n_workers=2 - Number of workers to start
+    cluster = LocalCluster(processes=True ,n_workers=2)
     client = Client(cluster)
 
     print('client:', client)
 
-    for future in as_completed(client.map(slow_increment, range(4))): # Submit 4 jobs. slow_increment(0), slow_increment(1), slow_increment(2), slow_increment(3)
+    # Submit 4 jobs. slow_increment(0), slow_increment(1), slow_increment(2), slow_increment(3)
+    for future in as_completed(client.map(slow_increment, range(4))): 
         result = future.result()
         pprint(result)
