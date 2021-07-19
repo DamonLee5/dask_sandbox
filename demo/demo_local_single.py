@@ -5,6 +5,9 @@ import os
 from pprint import pprint
 from dask.distributed import Client, as_completed, LocalCluster
 
+# Example of how to use Dask to run separate processes and combine results.
+
+# Define function that returns dictionary containing host name, PID, and time.
 def slow_increment(x):
     time.sleep(1)
     return {'result': x + 1,
@@ -20,7 +23,9 @@ if __name__ == '__main__':
 
     print('client:', client)
 
-    # Submit 4 jobs. slow_increment(0), slow_increment(1), slow_increment(2), slow_increment(3)
-    for future in as_completed(client.map(slow_increment, range(4))): 
-        result = future.result()
-        pprint(result)
+    # Call the function slow_increments with 4 different arguments and map to workers
+    for output in as_completed(client.map(slow_increment, range(4))): 
+        # Collect output of each job and combin into result
+        result = output.result()
+        # Print the result of all 4 jobs
+        pprint(output)
