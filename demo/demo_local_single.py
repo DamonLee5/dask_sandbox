@@ -6,7 +6,7 @@ from pprint import pprint
 from dask.distributed import Client, as_completed, LocalCluster
 
 def slow_increment(x):
-    time.sleep(5)
+    time.sleep(1)
     return {'result': x + 1,
             'host': socket.gethostname(),
             'pid': os.getpid(),
@@ -15,7 +15,7 @@ def slow_increment(x):
 if __name__ == '__main__':
     # Set processes=True - Multiple independence processes with different process IDs will be used.
     # Set n_workers=2 - Number of workers to start
-    cluster = LocalCluster(processes=True ,n_workers=2)
+    cluster = LocalCluster(processes=True ,n_workers=4)
     client = Client(cluster)
 
     print('client:', client)
