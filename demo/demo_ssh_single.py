@@ -16,10 +16,14 @@ def slow_increment(x):
             'time': time.strftime("%H:%M:%S")}
 
 if __name__ == '__main__':
-    cluster = SSHCluster(
-    ["localhost", "localhost", "localhost", "localhost","brown-a028","brown-a028","brown-a028","brown-a205","brown-a205","brown-a205","brown-a257","brown-a257","brown-a257"],
-    connect_options={"known_hosts": None},
-    worker_options={"nthreads": 8},
+    # SSHCluster webpage: https://docs.dask.org/en/latest/setup/ssh.html
+    # Reserve 4 nodes. Use one node(localhost) to run this script.
+    # hosts: List of hostnames or addresses on which to launch our cluster. The first will be used for the scheduler and the rest for workers.
+    # We have 12 workers here, for each worker, we assign 8 threads to it.   
+    cluster = SSHCluster( 
+    hosts=["localhost", "localhost", "localhost", "localhost"],
+    connect_options={"username":'xxx', "password":"xxx","known_hosts": None},
+    worker_options={"nthreads": 1},
     scheduler_options={"port": 0, "dashboard_address": ":8797"}
 )
     client = Client(cluster)
@@ -28,7 +32,7 @@ if __name__ == '__main__':
     while True:
         nb_workers = len(client.scheduler_info()["workers"])
         print('Got {} workers'.format(nb_workers))
-        if nb_workers >= 12:
+        if nb_workers >= 3:
             break
         time.sleep(1)
 
@@ -36,6 +40,6 @@ if __name__ == '__main__':
 
     print('client:', client)
 
-    for future in as_completed(client.map(slow_increment, range(0,800))): # FIX
+    for future in as_completed(client.map(slow_increment, range(0,20))): # FIX
         result = future.result()
         pprint(result)
